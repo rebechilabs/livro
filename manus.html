@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico de Dependência Operacional | A Empresa Que Funciona Sem Você</title>
+    <meta name="description" content="Descubra em 5 minutos se você é o gargalo da sua empresa. Teste gratuito com diagnóstico instantâneo.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .content {
+            padding: 40px 30px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-block {
+            margin-bottom: 35px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .question-number {
+            color: #667eea;
+            font-weight: 700;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 1.15em;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 15px 20px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .option.selected {
+            background: #f0f4ff;
+            border-color: #667eea;
+            font-weight: 600;
+        }
+
+        .form-section {
+            display: none;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+
+        .form-section h2 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 1.8em;
+        }
+
+        .form-section p {
+            color: #4a5568;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-section {
+            display: none;
+            padding: 40px 30px;
+        }
+
+        .result-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .result-zone {
+            display: inline-block;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.5em;
+            font-weight: 700;
+            margin: 20px 0;
+        }
+
+        .zone-verde { background: #48bb78; color: white; }
+        .zone-amarela { background: #ecc94b; color: #2d3748; }
+        .zone-laranja { background: #ed8936; color: white; }
+        .zone-vermelha { background: #f56565; color: white; }
+        .zone-preta { background: #2d3748; color: white; }
+
+        .result-score {
+            font-size: 3em;
+            font-weight: 700;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .result-ilo {
+            font-size: 1.3em;
+            color: #4a5568;
+        }
+
+        .result-content {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+        }
+
+        .result-content h3 {
+            color: #2d3748;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .result-content p {
+            color: #4a5568;
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+
+        .result-content ul {
+            margin-left: 20px;
+            color: #4a5568;
+        }
+
+        .result-content li {
+            margin-bottom: 10px;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .cta-section h3 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .share-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        .share-card h2 {
+            color: #2d3748;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        .share-visual {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 40px;
+            color: white;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        .share-visual h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .share-visual .big-score {
+            font-size: 4em;
+            font-weight: 700;
+            margin: 20px 0;
+        }
+
+        .share-visual .zone-badge {
+            display: inline-block;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: 700;
+            margin: 15px 0;
+        }
+
+        .share-visual .instagram-handle {
+            margin-top: 20px;
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .share-instructions {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .share-instructions h4 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+
+        .share-instructions ol {
+            margin-left: 20px;
+            color: #4a5568;
+        }
+
+        .share-instructions li {
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+
+        .pulse-button {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            margin: 10px;
+            transition: transform 0.2s;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+        }
+
+        .privacy-text {
+            font-size: 0.85em;
+            color: #718096;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.6em;
+            }
+            
+            .content {
+                padding: 25px 20px;
+            }
+
+            .question-text {
+                font-size: 1em;
+            }
+
+            .result-score {
+                font-size: 2.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Diagnóstico de Dependência Operacional</h1>
+            <p>Descubra em 5 minutos se você é o gargalo da sua empresa</p>
+        </div>
+
+        <div class="content">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+
+            <form id="diagnosticForm">
+                <!-- As 20 perguntas serão geradas aqui pelo JavaScript -->
+            </form>
+
+            <!-- Seção de captura de dados -->
+            <div class="form-section" id="captureSection">
+                <h2>Quase lá!</h2>
+                <p>Preencha seus dados para receber seu diagnóstico personalizado instantaneamente</p>
+                
+                <div class="form-group">
+                    <label for="nome">Nome Completo *</label>
+                    <input type="text" id="nome" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">E-mail *</label>
+                    <input type="email" id="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="whatsapp">WhatsApp (com DDD) *</label>
+                    <input type="tel" id="whatsapp" placeholder="(11) 99999-9999" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="faturamento">Faturamento Anual da Empresa *</label>
+                    <select id="faturamento" required>
+                        <option value="">Selecione...</option>
+                        <option value="ate1m">Até R$ 1 milhão</option>
+                        <option value="1m-5m">R$ 1M - R$ 5M</option>
+                        <option value="5m-20m">R$ 5M - R$ 20M</option>
+                        <option value="20m-50m">R$ 20M - R$ 50M</option>
+                        <option value="50m-100m">R$ 50M - R$ 100M</option>
+                        <option value="acima100m">Acima de R$ 100M</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="funcionarios">Número de Funcionários *</label>
+                    <select id="funcionarios" required>
+                        <option value="">Selecione...</option>
+                        <option value="1-10">1-10</option>
+                        <option value="11-50">11-50</option>
+                        <option value="51-100">51-100</option>
+                        <option value="101-200">101-200</option>
+                        <option value="acima200">Acima de 200</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="setor">Setor da Empresa *</label>
+                    <input type="text" id="setor" placeholder="Ex: Tecnologia, Serviços, Comércio..." required>
+                </div>
+
+                <button type="button" class="btn" id="btnVerDiagnostico">VER MEU DIAGNÓSTICO</button>
+                
+                <p class="privacy-text">Seus dados estão seguros. Usaremos apenas para enviar conteúdos relevantes sobre gestão empresarial. Você pode cancelar a qualquer momento.</p>
+            </div>
+        </div>
+
+        <!-- Seção de resultado -->
+        <div class="result-section" id="resultSection">
+            <!-- O resultado será gerado aqui pelo JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // CONFIGURAÇÃO: Cole aqui a URL do seu Google Sheets
+        // Veja o arquivo GUIA_GOOGLE_SHEETS.md para instruções
+        // ========================================
+        const GOOGLE_SHEETS_URL = 'COLE_SUA_URL_AQUI';
+        
+        // Dados das 20 perguntas
+        const questions = [
+            {
+                id: 1,
+                text: "Quantas horas por semana você trabalha na sua empresa?",
+                options: [
+                    { text: "Menos de 40 horas", points: 0 },
+                    { text: "40-50 horas", points: 2 },
+                    { text: "51-70 horas", points: 3 },
+                    { text: "Mais de 70 horas", points: 5 }
+                ]
+            },
+            {
+                id: 2,
+                text: "Com que frequência você trabalha fins de semana?",
+                options: [
+                    { text: "Nunca ou raramente", points: 0 },
+                    { text: "1-2 vezes por mês", points: 2 },
+                    { text: "Quase todos os fins de semana", points: 3 },
+                    { text: "Todos os fins de semana", points: 5 }
+                ]
+            },
+            {
+                id: 3,
+                text: "Quando foi a última vez que você tirou férias de 7+ dias CONSECUTIVOS sem checar e-mail ou celular?",
+                options: [
+                    { text: "Nos últimos 6 meses", points: 0 },
+                    { text: "Entre 6 meses e 1 ano", points: 2 },
+                    { text: "Há mais de 1 ano", points: 3 },
+                    { text: "Nunca ou há mais de 3 anos", points: 5 }
+                ]
+            },
+            {
+                id: 4,
+                text: "Quantas mensagens de trabalho (WhatsApp, e-mail, ligações) você recebe FORA do horário comercial por dia?",
+                options: [
+                    { text: "Menos de 5", points: 0 },
+                    { text: "5-15", points: 2 },
+                    { text: "16-30", points: 3 },
+                    { text: "Mais de 30", points: 5 }
+                ]
+            },
+            {
+                id: 5,
+                text: "Se você ficasse 30 dias sem acesso à empresa (sem e-mail, celular, nada), o que aconteceria?",
+                options: [
+                    { text: "Funcionaria normalmente", points: 0 },
+                    { text: "Funcionaria com pequenos ajustes", points: 2 },
+                    { text: "Teria problemas sérios mas não quebraria", points: 3 },
+                    { text: "Provavelmente entraria em colapso", points: 5 }
+                ]
+            },
+            {
+                id: 6,
+                text: "Quantas decisões você precisa aprovar pessoalmente por dia?",
+                options: [
+                    { text: "Menos de 5", points: 0 },
+                    { text: "5-10", points: 2 },
+                    { text: "11-20", points: 3 },
+                    { text: "Mais de 20", points: 5 }
+                ]
+            },
+            {
+                id: 7,
+                text: "Qual o valor mínimo de compra que precisa da sua aprovação?",
+                options: [
+                    { text: "Acima de R$ 20.000", points: 0 },
+                    { text: "Entre R$ 5.000 e R$ 20.000", points: 2 },
+                    { text: "Entre R$ 1.000 e R$ 5.000", points: 3 },
+                    { text: "Menos de R$ 1.000", points: 5 }
+                ]
+            },
+            {
+                id: 8,
+                text: "Sua equipe toma decisões importantes sem te consultar?",
+                options: [
+                    { text: "Sim, frequentemente", points: 0 },
+                    { text: "Às vezes", points: 2 },
+                    { text: "Raramente", points: 3 },
+                    { text: "Nunca, tudo passa por mim", points: 5 }
+                ]
+            },
+            {
+                id: 9,
+                text: "Quando surge um problema operacional, o que acontece?",
+                options: [
+                    { text: "A equipe resolve sozinha", points: 0 },
+                    { text: "A equipe resolve e me informa depois", points: 2 },
+                    { text: "Me consultam antes de resolver", points: 3 },
+                    { text: "Esperam eu resolver", points: 5 }
+                ]
+            },
+            {
+                id: 10,
+                text: "Quantos processos críticos da empresa só VOCÊ sabe fazer?",
+                options: [
+                    { text: "Nenhum", points: 0 },
+                    { text: "1-2 processos", points: 2 },
+                    { text: "3-5 processos", points: 3 },
+                    { text: "Mais de 5 processos", points: 5 }
+                ]
+            },
+            {
+                id: 11,
+                text: "Qual seu nível de envolvimento em vendas?",
+                options: [
+                    { text: "Não participo, só acompanho resultados", points: 0 },
+                    { text: "Participo de vendas estratégicas (grandes contas)", points: 2 },
+                    { text: "Participo da maioria das vendas", points: 3 },
+                    { text: "Sou o principal vendedor", points: 5 }
+                ]
+            },
+            {
+                id: 12,
+                text: "Seus clientes principais pedem para falar especificamente com você?",
+                options: [
+                    { text: "Não, falam com a equipe", points: 0 },
+                    { text: "Às vezes, mas aceitam falar com outros", points: 2 },
+                    { text: "Frequentemente", points: 3 },
+                    { text: "Sempre, só confiam em mim", points: 5 }
+                ]
+            },
+            {
+                id: 13,
+                text: "Se você saísse da empresa amanhã, quantos clientes você acha que sairiam junto?",
+                options: [
+                    { text: "Menos de 10%", points: 0 },
+                    { text: "10-30%", points: 2 },
+                    { text: "31-50%", points: 3 },
+                    { text: "Mais de 50%", points: 5 }
+                ]
+            },
+            {
+                id: 14,
+                text: "Você revisa pessoalmente todas as propostas comerciais antes de enviar?",
+                options: [
+                    { text: "Não, confio na equipe", points: 0 },
+                    { text: "Só as propostas acima de R$ 50k", points: 2 },
+                    { text: "A maioria das propostas", points: 3 },
+                    { text: "Todas, sem exceção", points: 5 }
+                ]
+            },
+            {
+                id: 15,
+                text: "Seus processos principais estão documentados e atualizados?",
+                options: [
+                    { text: "Sim, tudo documentado e seguido", points: 0 },
+                    { text: "Maioria documentada", points: 2 },
+                    { text: "Alguns documentados, mas desatualizados", points: 3 },
+                    { text: "Não, está tudo na minha cabeça", points: 5 }
+                ]
+            },
+            {
+                id: 16,
+                text: "Um novo funcionário consegue aprender um processo crítico sem sua ajuda?",
+                options: [
+                    { text: "Sim, facilmente", points: 0 },
+                    { text: "Sim, com alguma dificuldade", points: 2 },
+                    { text: "Só com minha supervisão direta", points: 3 },
+                    { text: "Não, só eu sei ensinar", points: 5 }
+                ]
+            },
+            {
+                id: 17,
+                text: "Você tem dashboards/métricas que mostram a saúde da empresa em tempo real?",
+                options: [
+                    { text: "Sim, acompanho tudo por dashboards", points: 0 },
+                    { text: "Tenho alguns dashboards básicos", points: 2 },
+                    { text: "Só planilhas que eu mesmo faço", points: 3 },
+                    { text: "Não, vou 'no feeling'", points: 5 }
+                ]
+            },
+            {
+                id: 18,
+                text: "Como você se sente em relação ao trabalho?",
+                options: [
+                    { text: "Energizado e motivado", points: 0 },
+                    { text: "Cansado, mas ainda apaixonado", points: 2 },
+                    { text: "Exausto e desmotivado", points: 3 },
+                    { text: "Esgotado, pensando em desistir", points: 5 }
+                ]
+            },
+            {
+                id: 19,
+                text: "Você consegue desligar do trabalho à noite e nos fins de semana?",
+                options: [
+                    { text: "Sim, totalmente", points: 0 },
+                    { text: "Na maioria das vezes", points: 2 },
+                    { text: "Raramente", points: 3 },
+                    { text: "Nunca, estou sempre conectado", points: 5 }
+                ]
+            },
+            {
+                id: 20,
+                text: "Seu relacionamento pessoal (família, amigos, saúde) está sendo afetado pelo trabalho?",
+                options: [
+                    { text: "Não, está equilibrado", points: 0 },
+                    { text: "Um pouco, mas nada grave", points: 2 },
+                    { text: "Sim, está afetando bastante", points: 3 },
+                    { text: "Sim, está destruindo minha vida pessoal", points: 5 }
+                ]
+            }
+        ];
+
+        // Variáveis globais
+        let answers = {};
+        let totalScore = 0;
+
+        // Renderizar perguntas
+        function renderQuestions() {
+            const form = document.getElementById('diagnosticForm');
+            
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-block';
+                questionDiv.innerHTML = `
+                    <div class="question-number">Pergunta ${q.id} de 20</div>
+                    <div class="question-text">${q.text}</div>
+                    <div class="options">
+                        ${q.options.map((opt, optIndex) => `
+                            <label class="option">
+                                <input type="radio" name="q${q.id}" value="${opt.points}" data-question="${q.id}">
+                                <span>${opt.text}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                form.appendChild(questionDiv);
+            });
+
+            // Adicionar event listeners
+            document.querySelectorAll('input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', handleAnswer);
+            });
+        }
+
+        // Lidar com resposta
+        function handleAnswer(e) {
+            const questionId = e.target.dataset.question;
+            const points = parseInt(e.target.value);
+            
+            answers[questionId] = points;
+            
+            // Marcar opção selecionada visualmente
+            const options = e.target.closest('.options').querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            e.target.closest('.option').classList.add('selected');
+            
+            // Atualizar barra de progresso
+            updateProgress();
+            
+            // Verificar se todas as perguntas foram respondidas
+            if (Object.keys(answers).length === 20) {
+                showCaptureForm();
+            }
+        }
+
+        // Atualizar barra de progresso
+        function updateProgress() {
+            const progress = (Object.keys(answers).length / 20) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        // Mostrar formulário de captura
+        function showCaptureForm() {
+            document.getElementById('captureSection').style.display = 'block';
+            document.getElementById('captureSection').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Calcular resultado
+        function calculateResult() {
+            totalScore = Object.values(answers).reduce((sum, points) => sum + points, 0);
+            
+            let zone, zoneName, zoneClass, ilo;
+            
+            if (totalScore <= 20) {
+                zone = 'Verde';
+                zoneName = 'ZONA VERDE';
+                zoneClass = 'zone-verde';
+                ilo = 90;
+            } else if (totalScore <= 40) {
+                zone = 'Amarela';
+                zoneName = 'ZONA AMARELA';
+                zoneClass = 'zone-amarela';
+                ilo = 65;
+            } else if (totalScore <= 65) {
+                zone = 'Laranja';
+                zoneName = 'ZONA LARANJA';
+                zoneClass = 'zone-laranja';
+                ilo = 35;
+            } else if (totalScore <= 85) {
+                zone = 'Vermelha';
+                zoneName = 'ZONA VERMELHA';
+                zoneClass = 'zone-vermelha';
+                ilo = 10;
+            } else {
+                zone = 'Preta';
+                zoneName = 'ZONA PRETA';
+                zoneClass = 'zone-preta';
+                ilo = 0;
+            }
+            
+            return { zone, zoneName, zoneClass, ilo };
+        }
+
+        // Mostrar resultado
+        function showResult() {
+            const nome = document.getElementById('nome').value;
+            const result = calculateResult();
+            
+            // Salvar dados (aqui você integraria com seu backend)
+            const userData = {
+                nome: nome,
+                email: document.getElementById('email').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                faturamento: document.getElementById('faturamento').value,
+                funcionarios: document.getElementById('funcionarios').value,
+                setor: document.getElementById('setor').value,
+                score: totalScore,
+                zone: result.zone,
+                ilo: result.ilo,
+                answers: answers,
+                timestamp: new Date().toISOString()
+            };
+            
+            console.log('Dados do usuário:', userData);
+            
+            // Enviar para Google Sheets
+            sendToGoogleSheets(userData);
+            
+            // Esconder formulário e mostrar resultado
+            document.querySelector('.content').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'block';
+            
+            // Renderizar resultado
+            renderResult(nome, result);
+            
+            // Scroll para o topo
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Compartilhar no WhatsApp
+        function shareWhatsApp() {
+            const nome = document.getElementById('nome').value;
+            const result = calculateResult();
+            const message = `🎯 Acabei de fazer o Diagnóstico de Dependência Operacional!\n\nMeu resultado: ${result.zoneName}\nPontuação: ${totalScore}/100\nÍndice de Liberdade Operacional: ${result.ilo}%\n\n${result.zone === 'Verde' ? '✅ Minha empresa funciona sem mim!' : '⚠️ Descobri que sou o gargalo da minha empresa...'}\n\nFaça o seu teste também (5 minutos):\n[LINK_DO_SEU_SITE]\n\n#EmpresaAutonoma #Empreendedorismo`;
+            
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Comprar livro
+        function buyBook() {
+            // Substitua pelo link real da sua página de vendas
+            window.open('https://seusite.com/livro', '_blank');
+            // Ou use: window.location.href = 'https://amazon.com.br/seu-livro';
+        }
+
+        // Enviar dados para Google Sheets
+        function sendToGoogleSheets(userData) {
+            // Verificar se a URL foi configurada
+            if (GOOGLE_SHEETS_URL === 'COLE_SUA_URL_AQUI') {
+                console.warn('⚠️ ATENÇÃO: Configure a URL do Google Sheets no código!');
+                console.warn('Veja o arquivo GUIA_GOOGLE_SHEETS.md para instruções.');
+                return;
+            }
+
+            // Enviar dados
+            fetch(GOOGLE_SHEETS_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(userData)
+            })
+            .then(() => {
+                console.log('✅ Dados enviados com sucesso para Google Sheets!');
+            })
+            .catch((error) => {
+                console.error('❌ Erro ao enviar dados:', error);
+                // Mesmo com erro no console, os dados geralmente chegam no Sheets
+            });
+        }
+
+        // Renderizar resultado
+        function renderResult(nome, result) {
+            const resultSection = document.getElementById('resultSection');
+            
+            const diagnostics = {
+                'Verde': {
+                    title: 'Parabéns! Você é um CEO Arquiteto',
+                    description: 'Sua empresa já funciona de forma autônoma. Você construiu sistemas sólidos, delegou com inteligência e tem liberdade operacional real. Você não é o gargalo, é o estrategista.',
+                    nextSteps: [
+                        'Continue refinando seus sistemas',
+                        'Foque em crescimento estratégico',
+                        'Considere expansão ou novos negócios',
+                        'Seja mentor para outros empresários'
+                    ]
+                },
+                'Amarela': {
+                    title: 'Você está no caminho certo, mas ainda há dependências',
+                    description: 'Você já deu passos importantes para reduzir sua dependência operacional, mas ainda há áreas críticas onde você é indispensável. Sua empresa funciona, mas não de forma totalmente autônoma.',
+                    nextSteps: [
+                        'Documente os 5 processos mais críticos',
+                        'Implemente alçadas de decisão claras',
+                        'Delegue vendas para a equipe (comece com 20%)',
+                        'Crie dashboards para acompanhar sem microgerenciar',
+                        'Teste 7 dias de férias sem celular'
+                    ]
+                },
+                'Laranja': {
+                    title: 'Atenção! Você é o gargalo da sua empresa',
+                    description: 'Você construiu uma empresa, mas virou prisioneiro dela. Você é o centro de tudo: decisões, vendas, operações. Sua empresa não funciona sem você. Se continuar assim, o crescimento vai travar e o burnout é questão de tempo.',
+                    nextSteps: [
+                        'Semana 1-2: Faça o mapeamento de processos críticos',
+                        'Semana 3-4: Implemente alçadas de decisão',
+                        'Mês 2: Delegue 1 processo crítico por semana',
+                        'Mês 3: Contrate ou promova um gerente operacional',
+                        'Mês 4: Teste 3 dias fora da empresa'
+                    ]
+                },
+                'Vermelha': {
+                    title: 'ALERTA CRÍTICO! Você está a um passo do colapso',
+                    description: 'Sua situação é insustentável. Você não tem empresa, tem um emprego que você criou para si mesmo. Trabalha 70+ horas/semana, não desconecta nunca, e está caminhando para o burnout. Sua saúde, família e a própria empresa estão em risco.',
+                    nextSteps: [
+                        'MÊS 1: Identifique as 3 tarefas que mais consomem seu tempo e delegue IMEDIATAMENTE',
+                        'MÊS 2: Documente os 5 processos mais críticos e contrate um braço direito operacional',
+                        'MÊS 3: Tire 5 dias de folga (sem celular, sem e-mail) e avalie o que quebrou'
+                    ]
+                },
+                'Preta': {
+                    title: 'EMERGÊNCIA! Pare tudo e leia isto',
+                    description: 'Você está em colapso ou muito próximo disso. Sua pontuação indica que você está trabalhando em um ritmo insustentável, sem nenhuma estrutura de suporte. Você não está construindo uma empresa, está se destruindo.',
+                    nextSteps: [
+                        'HOJE: Marque consulta médica e converse com alguém de confiança',
+                        'ESTA SEMANA: Tire 3 dias de folga e liste TUDO que você faz',
+                        'PRÓXIMAS 2 SEMANAS: Delegue 50% das suas tarefas operacionais',
+                        'Considere contratar um COO temporário ou procure mentoria especializada'
+                    ]
+                }
+            };
+            
+            const diag = diagnostics[result.zone];
+            
+            resultSection.innerHTML = `
+                <div class="result-header">
+                    <h2>${nome}, você está na:</h2>
+                    <div class="result-zone ${result.zoneClass}">${result.zoneName}</div>
+                    <div class="result-score">${totalScore} <span style="font-size: 0.5em;">de 100 pontos</span></div>
+                    <div class="result-ilo">Índice de Liberdade Operacional (ILO): ${result.ilo}%</div>
+                </div>
+
+                <div class="result-content">
+                    <h3>${diag.title}</h3>
+                    <p>${diag.description}</p>
+                    
+                    <h3 style="margin-top: 30px;">Próximos Passos:</h3>
+                    <ul>
+                        ${diag.nextSteps.map(step => `<li>${step}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <div class="share-card">
+                    <h2>📸 Compartilhe Seu Resultado no Instagram!</h2>
+                    <p style="color: #4a5568; margin-bottom: 20px;">Tire um print deste card e publique nos seus Stories marcando <strong>@alexandresilva_adv</strong> - Eu vou republicar! 🚀</p>
+                    
+                    <div class="share-visual" id="shareCard">
+                        <h3>Meu Diagnóstico de Dependência Operacional</h3>
+                        <div class="big-score">${totalScore}/100</div>
+                        <div class="zone-badge ${result.zoneClass}">${result.zoneName}</div>
+                        <p style="margin-top: 20px; font-size: 1.1em;">ILO: ${result.ilo}%</p>
+                        <div class="instagram-handle">@alexandresilva_adv</div>
+                    </div>
+
+                    <div class="share-instructions">
+                        <h4>Como compartilhar:</h4>
+                        <ol>
+                            <li>Tire um <strong>screenshot</strong> do card roxo acima</li>
+                            <li>Publique no seu <strong>Stories do Instagram</strong></li>
+                            <li>Marque <strong>@alexandresilva_adv</strong></li>
+                            <li>Eu vou <strong>republicar</strong> seu resultado! 🎉</li>
+                        </ol>
+                    </div>
+
+                    <button class="btn pulse-button" onclick="alert('Não esqueça de marcar @alexandresilva_adv no Instagram!')">JÁ COMPARTILHEI!</button>
+                    
+                    <div style="display: flex; gap: 15px; margin-top: 20px; flex-wrap: wrap; justify-content: center;">
+                        <button class="btn-secondary" onclick="shareWhatsApp()" style="flex: 1; min-width: 200px;">📱 ENVIAR PARA UM AMIGO</button>
+                        <button class="btn-secondary" onclick="buyBook()" style="flex: 1; min-width: 200px; background: #667eea; color: white;">📚 COMPRAR O LIVRO</button>
+                    </div>
+                </div>
+
+                <div class="cta-section">
+                    <h3>Quer Sair Dessa Situação?</h3>
+                    <p style="margin: 20px 0;">O livro "A Empresa Que Funciona Sem Você" tem o método completo para você construir uma empresa autônoma em 6-18 meses.</p>
+                    <button class="btn-secondary" onclick="alert('Link para compra do livro')">COMPRAR O LIVRO AGORA</button>
+                    <button class="btn-secondary" onclick="alert('Link para download do capítulo')">BAIXAR CAPÍTULO GRÁTIS</button>
+                </div>
+            `;
+        }
+
+        // Event listener para botão de diagnóstico
+        document.addEventListener('DOMContentLoaded', function() {
+            renderQuestions();
+            
+            document.getElementById('btnVerDiagnostico').addEventListener('click', function() {
+                // Validar formulário
+                const nome = document.getElementById('nome').value;
+                const email = document.getElementById('email').value;
+                const whatsapp = document.getElementById('whatsapp').value;
+                const faturamento = document.getElementById('faturamento').value;
+                const funcionarios = document.getElementById('funcionarios').value;
+                const setor = document.getElementById('setor').value;
+                
+                if (!nome || !email || !whatsapp || !faturamento || !funcionarios || !setor) {
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                    return;
+                }
+                
+                showResult();
+            });
+
+            // Máscara para WhatsApp
+            document.getElementById('whatsapp').addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length <= 11) {
+                    value = value.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+                    value = value.replace(/^(\d{2})(\d{4})(\d{0,4})$/, '($1) $2-$3');
+                    value = value.replace(/^(\d{2})(\d{0,5})$/, '($1) $2');
+                    value = value.replace(/^(\d*)$/, '($1');
+                }
+                e.target.value = value;
+            });
+        });
+    </script>
+</body>
+</html>
