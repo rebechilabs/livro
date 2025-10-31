@@ -403,6 +403,73 @@
                 font-size: 2.5em;
             }
         }
+
+        /* ============================================
+           RESPONSIVIDADE MOBILE MELHORADA
+           ============================================ */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 30px 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .content {
+                padding: 25px 20px;
+            }
+            
+            .question-block {
+                padding: 20px 15px;
+            }
+            
+            .question-text {
+                font-size: 1.05em;
+            }
+            
+            .option {
+                padding: 12px 15px;
+                font-size: 0.95em;
+            }
+            
+            .btn, .btn-secondary {
+                width: 100%;
+                padding: 15px 20px;
+                font-size: 1em;
+                margin: 5px 0;
+            }
+            
+            .cta-section {
+                padding: 25px 20px;
+            }
+            
+            .cta-section h3 {
+                font-size: 1.5em;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+            
+            .header p {
+                font-size: 0.95em;
+            }
+            
+            .question-text {
+                font-size: 1em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -843,9 +910,7 @@
 
         // Comprar livro
         function buyBook() {
-            // Substitua pelo link real da sua página de vendas
-            window.open('https://seusite.com/livro', '_blank');
-            // Ou use: window.location.href = 'https://amazon.com.br/seu-livro';
+            window.open('https://a.co/d/cEZEAmw', '_blank');
         }
 
         // Enviar dados para Google Sheets
@@ -986,8 +1051,8 @@
                 <div class="cta-section">
                     <h3>Quer Sair Dessa Situação?</h3>
                     <p style="margin: 20px 0;">O livro "A Empresa Que Funciona Sem Você" tem o método completo para você construir uma empresa autônoma em 6-18 meses.</p>
-                    <button class="btn-secondary" onclick="alert('Link para compra do livro')">COMPRAR O LIVRO AGORA</button>
-                    <button class="btn-secondary" onclick="alert('Link para download do capítulo')">BAIXAR CAPÍTULO GRÁTIS</button>
+                    <button class="btn-secondary" onclick="buyBook()">COMPRAR O LIVRO AGORA</button>
+                    <button class="btn-secondary" onclick="window.open('https://rebechilabs.github.io/livro/downloads/Introducao_A_Empresa_Que_Funciona_Sem_Voce.pdf', '_blank')">BAIXAR CAPÍTULO GRÁTIS</button>
                 </div>
             `;
         }
